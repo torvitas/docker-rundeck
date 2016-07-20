@@ -1,8 +1,4 @@
-# Dockerfile for rundeck
-# https://github.com/jjethwa/rundeck
-# Bump to 2.6.8
-
-FROM debian:jessie
+FROM ubuntu:16.04
 
 MAINTAINER Jordan Jethwa
 
@@ -12,7 +8,7 @@ ENV RUNDECK_STORAGE_PROVIDER file
 ENV RUNDECK_PROJECT_STORAGE_TYPE file
 ENV NO_LOCAL_MYSQL false
 
-RUN apt-get -qq update && apt-get -qqy upgrade && apt-get -qqy install --no-install-recommends bash supervisor procps sudo ca-certificates openjdk-7-jre-headless openssh-client mysql-server mysql-client pwgen curl git && apt-get clean
+RUN apt-get -qq update && apt-get -qqy upgrade && apt-get -qqy install --no-install-recommends bash supervisor procps sudo ca-certificates openjdk-9-jre-headless openssh-client mysql-server mysql-client pwgen curl git && apt-get clean
 
 RUN curl -Lo /tmp/rundeck.deb http://dl.bintray.com/rundeck/rundeck-deb/rundeck-2.6.8-1-GA.deb
 
