@@ -8,7 +8,7 @@ RUN rpm -Uvh http://repo.rundeck.org/latest.rpm && \
 		openssh-clients && \
     yum -y clean all
 
-COPY src/* /usr/local/src/
+COPY src/* /usr/local/src/rundeck/
 COPY etc/* /etc/rundeck/
 
 EXPOSE 4440
