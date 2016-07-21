@@ -1,0 +1,9 @@
+stages:
+  - build
+
+buildnginx:
+  stage: build
+  script:
+    - make build
+  tags:
+    - dind
