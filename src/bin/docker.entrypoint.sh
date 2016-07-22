@@ -2,7 +2,11 @@
 source /usr/local/src/rundeck/bin/docker.entrypoint.functions.sh
 
 # ensuring everything is where it should be
-initRundeck
+initfile=/etc/rundeck.init
+if [ ! -f ${initfile} ]; then
+    initRundeck
+    touch ${initfile}
+fi
 source /etc/rundeck/profile
 
 case ${1} in
