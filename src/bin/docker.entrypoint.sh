@@ -2,7 +2,7 @@
 source /usr/local/src/rundeck/bin/docker.entrypoint.functions.sh
 
 # ensuring everything is where it should be
-initfile=/etc/rundeck.init
+initfile=/etc/rundeck/rundeck.init
 if [ ! -f ${initfile} ]; then
     initRundeck
     touch ${initfile}
