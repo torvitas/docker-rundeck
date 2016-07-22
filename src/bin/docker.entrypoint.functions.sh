@@ -1,5 +1,5 @@
 #!/bin/bash
-source /usr/local/src/template.renderer.sh
+source /usr/local/src/rundeck/bin/template.renderer.sh
 
 function initRundeck()
 {
@@ -10,7 +10,7 @@ function initRundeck()
     SERVER_PORT=$(echo ${SERVER_URL} | awk -F/ "{print $3}" | awk -F: "{print $2}")
     if [ -z ${SERVER_PORT} ]; then
       # No port in SERVER_URL so assume 443 for HTTPS or 80 otherwise
-      if [ ${SERVER_PROTO} == "https" ]; then
+      if [ "${SERVER_PROTO}" == "https" ]; then
          SERVER_PORT=443
       else
          SERVER_PORT=80
@@ -39,8 +39,8 @@ function initRundeck()
 	render /usr/local/src/rundeck/templates/rundeck-config.properties.template -- > /etc/rundeck/rundeck-config.properties
 	render /usr/local/src/rundeck/templates/framework.properties.template -- > /etc/rundeck/framework.properties
 
-	if ls /usr/local/src/rundeck/plugins/*.[jar|zip|groovy] 1> /dev/null 2>&1; then
+	if ls /usr/local/src/rundeck/plugins/*.{jar,zip,groovy} 1> /dev/null 2>&1; then
 		echo "=>Installing plugins from /usr/local/src/rundeck/plugins"
-		mv /usr/local/src/rundeck/plugins/*.[jar|zip|groovy] /var/lib/rundeck/libext 2>/dev/null
+		mv /usr/local/src/rundeck/plugins/*.{jar,zip,groovy} /var/lib/rundeck/libext 2>/dev/null
 	fi
 }
