@@ -19,8 +19,8 @@ function initRundeck()
     DATABASE_HOSTNAME=${DATABASE_HOSTNAME:-"db"}
     DATABASE_NAME=${DATABASE_NAME:-"rundeck"}
     DATABASE_URL=${DATABASE_URL:-"jdbc:mysql://${DATABASE_HOSTNAME}/${DATABASE_NAME}?autoReconnect=true"}
-    DB_ENV_DATABASE_USER=${DB_ENV_DATABASE_USER:-"rundeck"}
-    DB_ENV_DATABASE_PASSWORD=${DB_ENV_DATABASE_USER:-"rundeck"}
+    DB_ENV_MYSQL_USER=${DB_ENV_MYSQL_USER:-"rundeck"}
+    DB_ENV_MYSQL_PASSWORD=${DB_ENV_MYSQL_USER:-"rundeck"}
 	DATABASE_USER=${DATABSE_USER:-${DB_ENV_MYSQL_USER}}
 	DATABASE_PASSWORD=${DATABASE_PASSWORD:-${DB_ENV_MYSQL_PASSWORD}}
     RUNDECK_PASSWORD=${RUNDECK_PASSWORD:-$(pwgen -s 20 1)}
@@ -48,4 +48,24 @@ function initRundeck()
     mkdir -p /var/log/rundeck
 	touch /var/log/rundeck/rundeck.log
 	chown -R rundeck.rundeck /var/log/rundeck
+
+
+	echo "=> Settings:"
+	function printSettings()
+	{
+	    echo "===================================="
+	    echo "- Database Hostname: ${DATABASE_HOSTNAME}"
+	    echo "- Database Name: ${DATABASE_NAME}"
+	    echo "- Database URL: ${DATABSE_URL}"
+	    echo "- Database User: ${DATABASE_USER}"
+	    echo "- Database Password: ${DATABASE_PASSWORD}"
+	    echo "- Rundeck Password: ${RUNDECK_PASSWORD}"
+	    echo "- Rundeck Storage Provider: ${RUNDECK_STORAGE_PROVIDER}"
+	    echo "- Rundeck Project Storage Type: ${RUNDECK_PROJECT_STORAGE_TYPE}"
+	    echo "- Admin User: ${ADMIN_USER}"
+	    echo "- Admin Password: ${ADMIN_PASSWORD}"
+	    echo "===================================="
+    }
+    printSettings > /rundeck.settings.txt
+    printSettings
 }
