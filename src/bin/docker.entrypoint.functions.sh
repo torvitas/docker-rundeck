@@ -43,4 +43,9 @@ function initRundeck()
 		echo "=>Installing plugins from /usr/local/src/rundeck/plugins"
 		mv /usr/local/src/rundeck/plugins/*.{jar,zip,groovy} /var/lib/rundeck/libext 2>/dev/null
 	fi
+
+	echo "=> Setting permissions..."
+    mkdir -p /var/log/rundeck
+	touch /var/log/rundeck/rundeck.log
+	chown -R rundeck.rundeck /var/log/rundeck
 }
