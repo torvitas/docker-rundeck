@@ -5,9 +5,9 @@ function initRundeck()
 {
     # define default configuration values
     SERVER_URL=${SERVER_URL:-}
-    SERVER_HOSTNAME=$(echo ${SERVER_URL} | awk -F/ "{print $3}" | awk -F: "{print $1}")
-    SERVER_PROTO=$(echo ${SERVER_URL} | awk -F/ "{print $1}" | awk -F: "{print $1}")
-    SERVER_PORT=$(echo ${SERVER_URL} | awk -F/ "{print $3}" | awk -F: "{print $2}")
+    SERVER_HOSTNAME=$(echo ${SERVER_URL} | awk -F/ '{print $3}' | awk -F: '{print $1}')
+    SERVER_PROTO=$(echo ${SERVER_URL} | awk -F/ '{print $1}' | awk -F: '{print $1}')
+    SERVER_PORT=$(echo ${SERVER_URL} | awk -F/ '{print $3}' | awk -F: '{print $2}')
     if [ -z ${SERVER_PORT} ]; then
       # No port in SERVER_URL so assume 443 for HTTPS or 80 otherwise
       if [ "${SERVER_PROTO}" == "https" ]; then
@@ -36,7 +36,6 @@ function initRundeck()
     ADMIN_PASSWORD=${ADMIN_PASSWORD:-$(pwgen -s 20 1)}
     RUNDECK_SSH_USER=${RUNDECK_SSH_USER-rundeck}
 
-
 	if [ ! -f /var/lib/rundeck/.ssh/id_rsa ]; then
 		echo "=>Generating rundeck key"
 		sudo -u rundeck ssh-keygen -t rsa -b 4096 -f /var/lib/rundeck/.ssh/id_rsa -N ""
@@ -55,7 +54,6 @@ function initRundeck()
     mkdir -p /var/log/rundeck
 	touch /var/log/rundeck/rundeck.log
 	chown -R rundeck.rundeck /var/log/rundeck
-
 
 	echo "=> Settings:"
 	function printSettings()
@@ -77,6 +75,6 @@ function initRundeck()
 	    echo "- Admin Password: ${ADMIN_PASSWORD}"
 	    echo "===================================="
     }
-    printSettings > /rundeck.settings.txt
+    printSettings > /etc/rundeck/settings.txt
     printSettings
 }

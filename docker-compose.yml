@@ -13,7 +13,7 @@ database:
         MYSQL_ROOT_PASSWORD: "rundeck"
         MYSQL_USER: "rundeck"
         MYSQL_DATABASE: "rundeck"
-        MYSQL_PASSWORD: "rundeck"
+        MYSQL_PASSWORD: "kcednur"
     volumes_from:
      - dbdata
 data:
