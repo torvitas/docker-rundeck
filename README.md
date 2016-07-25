@@ -1,5 +1,23 @@
 # torvitas/rundeck
 
+## Quick start
+
+```bash
+git clone https://github.com/torvitas/docker-rundeck.git .
+make up log
+```
+
+### Available make tasks
+
+| Task | Description |
+|-----------|-------------|
+| `up` | docker-compose up |
+| `down` | docker-compose down --remove-orphans |
+| `log` | docker-compose log -f --tail=1000 |
+| `stop` | docker-compose stop |
+| `pull` | docker-compose pull |
+| `build` | docker-compose build |
+
 ## Configuration
 
 ### Available Configuration Parameters
