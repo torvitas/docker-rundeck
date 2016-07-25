@@ -10,9 +10,9 @@ RUN rpm -Uvh http://repo.rundeck.org/latest.rpm && \
 		openssh-clients && \
     yum -y clean all
 
+COPY etc/* /etc/rundeck/
 COPY src /usr/local/src/rundeck
 RUN chmod +x -R /usr/local/src/rundeck/bin/*
-COPY etc/* /etc/rundeck/
 
 EXPOSE 4440
 VOLUME ["/etc/rundeck", "/var/rundeck/projects", "/var/lib/rundeck/libext"]

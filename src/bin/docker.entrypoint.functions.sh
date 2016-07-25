@@ -16,19 +16,26 @@ function initRundeck()
          SERVER_PORT=80
       fi
     fi
-    DATABASE_HOSTNAME=${DATABASE_HOSTNAME:-"db"}
-    DATABASE_NAME=${DATABASE_NAME:-"rundeck"}
-    DATABASE_URL=${DATABASE_URL:-"jdbc:mysql://${DATABASE_HOSTNAME}/${DATABASE_NAME}?autoReconnect=true"}
-    DB_ENV_MYSQL_USER=${DB_ENV_MYSQL_USER:-"rundeck"}
-    DB_ENV_MYSQL_PASSWORD=${DB_ENV_MYSQL_USER:-"rundeck"}
+    function renderDatabaseUrl()
+    {
+        echo "jdbc:mysql://${DATABASE_HOSTNAME}/${DATABASE_NAME}?autoReconnect=true"
+    }
+
+    DATABASE_HOSTNAME=${DATABASE_HOSTNAME:-db}
+    DB_ENV_MYSQL_USER=${DB_ENV_MYSQL_USER:-rundeck}
+    DB_ENV_MYSQL_PASSWORD=${DB_ENV_MYSQL_USER:-rundeck}
+    DB_ENV_MYSQL_DATABASE=${DB_ENV_MYSQL_DATABASE:-rundeck}
+    DATABASE_NAME=${DATABASE_NAME:-${DB_ENV_MYSQL_DATABASE}}
 	DATABASE_USER=${DATABSE_USER:-${DB_ENV_MYSQL_USER}}
 	DATABASE_PASSWORD=${DATABASE_PASSWORD:-${DB_ENV_MYSQL_PASSWORD}}
+    DATABASE_URL=${DATABASE_URL:-$(renderDatabaseUrl)}
     RUNDECK_PASSWORD=${RUNDECK_PASSWORD:-$(pwgen -s 20 1)}
-    RUNDECK_STORAGE_PROVIDER=${RUNDECK_STORAGE_PROVIDER:-"file"}
-    RUNDECK_PROJECT_STORAGE_TYPE=${RUNDECK_PROJECT_STORAGE_TYPE:-"file"}
-    ADMIN_USER=${ADMIN_USER:-'admin'}
+    RUNDECK_STORAGE_PROVIDER=${RUNDECK_STORAGE_PROVIDER:-file}
+    RUNDECK_PROJECT_STORAGE_TYPE=${RUNDECK_PROJECT_STORAGE_TYPE:-file}
+    ADMIN_USER=${ADMIN_USER:-admin}
     ADMIN_PASSWORD=${ADMIN_PASSWORD:-$(pwgen -s 20 1)}
-    RUNDECK_SSH_USER=${RUNDECK_SSH_USER-'rundeck'}
+    RUNDECK_SSH_USER=${RUNDECK_SSH_USER-rundeck}
+
 
 	if [ ! -f /var/lib/rundeck/.ssh/id_rsa ]; then
 		echo "=>Generating rundeck key"
@@ -54,9 +61,13 @@ function initRundeck()
 	function printSettings()
 	{
 	    echo "===================================="
+	    echo "- Server Hostname: ${SERVER_HOSTNAME}"
+	    echo "- Server Protocol: ${SERVER_PROTO}"
+	    echo "- Server Port: ${SERVER_PORT}"
+	    echo "- Server Url: ${SERVER_URL}"
 	    echo "- Database Hostname: ${DATABASE_HOSTNAME}"
 	    echo "- Database Name: ${DATABASE_NAME}"
-	    echo "- Database URL: ${DATABSE_URL}"
+	    echo "- Database URL: ${DATABASE_URL}"
 	    echo "- Database User: ${DATABASE_USER}"
 	    echo "- Database Password: ${DATABASE_PASSWORD}"
 	    echo "- Rundeck Password: ${RUNDECK_PASSWORD}"

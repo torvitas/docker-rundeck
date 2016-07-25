@@ -1,0 +1,26 @@
+rundeck:
+    build: ./
+    environment:
+        SERVER_URL: "https://rundeck.localhost"
+    volumes_from:
+     - data
+    links:
+        - database:db
+database:
+    restart: always
+    image: mariadb:10
+    environment:
+        MYSQL_ROOT_PASSWORD: "rundeck"
+        MYSQL_USER: "rundeck"
+        MYSQL_DATABASE: "rundeck"
+        MYSQL_PASSWORD: "rundeck"
+    volumes_from:
+     - dbdata
+data:
+    image: registry.gitlab.itsdonewhenitsdone.net/docker/rundeck:master
+    command: --
+    entrypoint: /bin/true
+dbdata:
+    image: mariadb:10
+    command: --
+    entrypoint: /bin/true
