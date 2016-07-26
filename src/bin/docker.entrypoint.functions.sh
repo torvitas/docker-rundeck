@@ -110,7 +110,7 @@ function initUsers()
     passwordHash=$(buildPasswordHash ${!user} ${!password} ${!md5})
     permission=$(buildVariable "USER_PERMISSION" ${i})
     while [ ${!user} ]; do
-        echo ${!user}:${passwordHash},${!permission:=user} >> /etc/rundeck/realm.properties
+        echo ${!user}:${passwordHash},${!permission:=user} | tee /etc/rundeck/realm.properties
         let i=i+1
         user=$(buildVariable "USER" ${i})
         password=$(buildVariable "USER_PASSWORD" ${i})
