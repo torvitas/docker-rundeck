@@ -89,11 +89,13 @@ buildPasswordHash()
 {
     user=${1}
     password=${2}
-    md5=${3}
-    if [ ! ${md5} ]; then
-        md5=$(java -cp /var/lib/rundeck/bootstrap/jetty-all-7.6.0.v20120127.jar org.eclipse.jetty.util.security.Password ${user} ${password} 2>&1 | sed -n 3p)
+    md5="${3}"
+    if [ "${md5}" = "undefined" ]; then
+        passwordHash=$(java -cp /var/lib/rundeck/bootstrap/jetty-all-7.6.0.v20120127.jar org.eclipse.jetty.util.security.Password ${user} ${password} 2>&1 | sed -n 3p)
+    else
+        passwordHash=${md5}
     fi
-    echo ${md5}
+    echo ${passwordHash}
 }
 
 function initUsers()
@@ -101,13 +103,13 @@ function initUsers()
 	echo "=> Rendering user configuration..."
     RUNDECK_USER=${RUNDECK_USER:-rundeck}
     RUNDECK_USER_PASSWORD=${RUNDECK_USER_PASSWORD:-$(pwgen -s 20 1)}
-    RUNDECK_USER_MD5=$(buildPasswordHash ${RUNDECK_USER} ${RUNDECK_PASSWORD} ${RUNDECK_USER_MD5})
+    RUNDECK_USER_MD5=$(buildPasswordHash ${RUNDECK_USER:-undefined} ${RUNDECK_PASSWORD:-undefined} ${RUNDECK_USER_MD5:-undefined})
 	render /usr/local/src/rundeck/templates/realm.properties.template -- > /etc/rundeck/realm.properties
     i=0
     user=$(buildVariable "USER" ${i})
     password=$(buildVariable "USER_PASSWORD" ${i})
     md5=$(buildVariable "USER_MD5" ${i})
-    passwordHash=$(buildPasswordHash ${!user} ${!password} ${!md5})
+    passwordHash=$(buildPasswordHash ${!user:-undefined} ${!password:-undefined} ${!md5:-undefined})
     permission=$(buildVariable "USER_PERMISSION" ${i})
     while [ ${!user} ]; do
         echo ${!user}: ${passwordHash},${!permission:=user} | tee -a /etc/rundeck/realm.properties
@@ -115,8 +117,7 @@ function initUsers()
         user=$(buildVariable "USER" ${i})
         password=$(buildVariable "USER_PASSWORD" ${i})
         md5=$(buildVariable "USER_MD5" ${i})
-        passwordHash=$(buildPasswordHash ${!user} ${!password} ${!md5})
+        passwordHash=$(buildPasswordHash ${!user:-undefined} ${!password:-undefined} ${!md5:-undefined})
         permission=$(buildVariable "USER_PERMISSION" ${i})
     done
 }
-
