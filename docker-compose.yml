@@ -2,6 +2,9 @@ rundeck:
     build: ./
     environment:
         SERVER_URL: "https://rundeck.localhost"
+        RUNDECK_USER_0: "foo"
+        RUNDECK_USER_PASSWORD_0: "bar"
+        RUNDECK_USER_PERMISSION_0: "user,admin"
     volumes_from:
      - data
     links:

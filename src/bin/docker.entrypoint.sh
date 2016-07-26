@@ -6,6 +6,8 @@ initfile=/etc/rundeck/rundeck.init
 if [ ! -f ${initfile} ]; then
     initRundeck
     touch ${initfile}
+else
+    initUsers
 fi
 source /etc/rundeck/profile
 

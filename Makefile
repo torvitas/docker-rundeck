@@ -7,6 +7,6 @@ down:
 stop:
 	docker-compose stop
 log:
-	docker-compose logs -f --tail=1000
+	docker-compose logs -f --tail=1000 rundeck
 build:
 	docker-compose build

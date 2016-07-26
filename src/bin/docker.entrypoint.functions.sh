@@ -29,7 +29,7 @@ function initRundeck()
 	DATABASE_USER=${DATABSE_USER:-${DB_ENV_MYSQL_USER}}
 	DATABASE_PASSWORD=${DATABASE_PASSWORD:-${DB_ENV_MYSQL_PASSWORD}}
     DATABASE_URL=${DATABASE_URL:-$(renderDatabaseUrl)}
-    RUNDECK_PASSWORD=${RUNDECK_PASSWORD:-$(pwgen -s 20 1)}
+    initUsers
     RUNDECK_STORAGE_PROVIDER=${RUNDECK_STORAGE_PROVIDER:-file}
     RUNDECK_PROJECT_STORAGE_TYPE=${RUNDECK_PROJECT_STORAGE_TYPE:-file}
     ADMIN_USER=${ADMIN_USER:-admin}
@@ -68,13 +68,55 @@ function initRundeck()
 	    echo "- Database URL: ${DATABASE_URL}"
 	    echo "- Database User: ${DATABASE_USER}"
 	    echo "- Database Password: ${DATABASE_PASSWORD}"
-	    echo "- Rundeck Password: ${RUNDECK_PASSWORD}"
+	    echo "- Rundeck User: ${RUNDECK_USER}"
+	    echo "- Rundeck Password: ${RUNDECK_USER_PASSWORD}"
 	    echo "- Rundeck Storage Provider: ${RUNDECK_STORAGE_PROVIDER}"
 	    echo "- Rundeck Project Storage Type: ${RUNDECK_PROJECT_STORAGE_TYPE}"
-	    echo "- Admin User: ${ADMIN_USER}"
-	    echo "- Admin Password: ${ADMIN_PASSWORD}"
+	    echo "- CLI User: ${ADMIN_USER}"
+	    echo "- CLI Password: ${ADMIN_PASSWORD}"
 	    echo "===================================="
     }
     printSettings > /etc/rundeck/settings.txt
     printSettings
 }
+
+function buildVariable()
+{
+    echo "RUNDECK_${1}_${2}"
+}
+
+buildPasswordHash()
+{
+    user=${1}
+    password=${2}
+    md5=${3}
+    if [ ! ${md5} ]; then
+        md5=($(echo -n "${user}:${password}" | md5sum))
+    fi
+    echo ${md5}
+}
+
+function initUsers()
+{
+	echo "=> Rendering user configuration..."
+    RUNDECK_USER=${RUNDECK_USER:-rundeck}
+    RUNDECK_USER_PASSWORD=${RUNDECK_USER_PASSWORD:-$(pwgen -s 20 1)}
+    RUNDECK_USER_MD5=$(buildPasswordHash ${!RUNDECK_USER} ${!RUNDECK_PASSWORD} ${!RUNDECK_USER_MD5})
+	render /usr/local/src/rundeck/templates/realm.properties.template -- > /etc/rundeck/realm.properties
+    i=0
+    user=$(buildVariable "USER" ${i})
+    password=$(buildVariable "USER_PASSWORD" ${i})
+    md5=$(buildVariable "USER_MD5" ${i})
+    passwordHash=$(buildPasswordHash ${!user} ${!password} ${!md5})
+    permission=$(buildVariable "USER_PERMISSION" ${i})
+    while [ ${!user} ]; do
+        echo ${!user}:${passwordHash},${!permission:=user} >> /etc/rundeck/realm.properties
+        let i=i+1
+        user=$(buildVariable "USER" ${i})
+        password=$(buildVariable "USER_PASSWORD" ${i})
+        md5=$(buildVariable "USER_MD5" ${i})
+        passwordHash=$(buildPasswordHash ${!user} ${!password} ${!md5})
+        permission=$(buildVariable "USER_PERMISSION" ${i})
+    done
+}
+
