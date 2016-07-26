@@ -3,10 +3,12 @@ rundeck:
     #image: registry.gitlab.itsdonewhenitsdone.net/docker/rundeck:master
     environment:
         SERVER_URL: "https://rundeck.localhost"
-        DOCKER_DEBUG: 1
         RUNDECK_USER_0: "foo"
         RUNDECK_USER_PASSWORD_0: "bar"
         RUNDECK_USER_PERMISSION_0: "user,admin"
+        RUNDECK_USER_1: "joe"
+        RUNDECK_USER_PASSWORD_1: "doe"
+        RUNDECK_USER_PERMISSION_1: "user,admin"
     volumes_from:
      - data
     links:

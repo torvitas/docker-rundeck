@@ -101,7 +101,7 @@ function initUsers()
 	echo "=> Rendering user configuration..."
     RUNDECK_USER=${RUNDECK_USER:-rundeck}
     RUNDECK_USER_PASSWORD=${RUNDECK_USER_PASSWORD:-$(pwgen -s 20 1)}
-    RUNDECK_USER_MD5=$(buildPasswordHash ${!RUNDECK_USER} ${!RUNDECK_PASSWORD} ${!RUNDECK_USER_MD5})
+    RUNDECK_USER_MD5=$(buildPasswordHash ${RUNDECK_USER} ${RUNDECK_PASSWORD} ${RUNDECK_USER_MD5})
     echo "DEBUG: ${RUNDECK_USER}:${RUNDECK_USER_PASSWORD}: ${RUNDECK_USER_MD5}"
 	render /usr/local/src/rundeck/templates/realm.properties.template -- > /etc/rundeck/realm.properties
     i=0
@@ -109,17 +109,16 @@ function initUsers()
     password=$(buildVariable "USER_PASSWORD" ${i})
     md5=$(buildVariable "USER_MD5" ${i})
     passwordHash=$(buildPasswordHash ${!user} ${!password} ${!md5})
-    echo "DEBUG: ${user}:${password}: ${md5}"
     permission=$(buildVariable "USER_PERMISSION" ${i})
     while [ ${!user} ]; do
-        echo ${!user}: ${passwordHash},${!permission:=user} | tee /etc/rundeck/realm.properties
+        echo "DEBUG: ${!user}:${!password}: ${passwordHash}"
+        echo ${!user}: ${passwordHash},${!permission:=user} | tee -a /etc/rundeck/realm.properties
         let i=i+1
         user=$(buildVariable "USER" ${i})
         password=$(buildVariable "USER_PASSWORD" ${i})
         md5=$(buildVariable "USER_MD5" ${i})
         passwordHash=$(buildPasswordHash ${!user} ${!password} ${!md5})
         permission=$(buildVariable "USER_PERMISSION" ${i})
-        echo "DEBUG: ${user}:${password}: ${md5}"
     done
 }
 
