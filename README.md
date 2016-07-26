@@ -17,6 +17,7 @@ make up log
 | `stop` | docker-compose stop |
 | `pull` | docker-compose pull |
 | `build` | docker-compose build |
+| `hash` | This task expects two variables $user and $password to be set. |
 
 ## Configuration
 

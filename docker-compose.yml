@@ -7,7 +7,7 @@ rundeck:
         RUNDECK_USER_PASSWORD_0: "bar"
         RUNDECK_USER_PERMISSION_0: "user,admin"
         RUNDECK_USER_1: "joe"
-        RUNDECK_USER_MD5_1: "MD5:0606edae49b968314912afa316fef11c"
+        RUNDECK_USER_MD5_1: "MD5:098f6bcd4621d373cade4e832627b4f6"
         RUNDECK_USER_PERMISSION_1: "user,admin"
     volumes_from:
      - data
