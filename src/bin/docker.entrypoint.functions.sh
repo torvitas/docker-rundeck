@@ -91,7 +91,7 @@ buildPasswordHash()
     password=${2}
     md5=${3}
     if [ ! ${md5} ]; then
-        md5=($(echo -n "${user}:${password}" | md5sum))
+        md5=$(java -cp /var/lib/rundeck/bootstrap/jetty-all-7.6.0.v20120127.jar org.eclipse.jetty.util.security.Password ${user} ${password} 2>&1 | sed -n 3p)
     fi
     echo ${md5}
 }
@@ -110,7 +110,7 @@ function initUsers()
     passwordHash=$(buildPasswordHash ${!user} ${!password} ${!md5})
     permission=$(buildVariable "USER_PERMISSION" ${i})
     while [ ${!user} ]; do
-        echo ${!user}:${passwordHash},${!permission:=user} | tee /etc/rundeck/realm.properties
+        echo ${!user}: ${passwordHash},${!permission:=user} | tee /etc/rundeck/realm.properties
         let i=i+1
         user=$(buildVariable "USER" ${i})
         password=$(buildVariable "USER_PASSWORD" ${i})

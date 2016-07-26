@@ -22,6 +22,6 @@
 #
 # This sets the default user accounts for the Rundeck app
 #
-${RUNDECK_USER}:${RUNDECK_USER_MD5},user,admin,architect,deploy,build
+${RUNDECK_USER}: ${RUNDECK_USER_MD5},user,admin,architect,deploy,build
 #@jetty.user.deploy.name@:@jetty.user.deploy.password@,user,deploy
 #@jetty.user.build.name@:@jetty.user.build.password@,user,build
